@@ -1,3 +1,8 @@
+---
+title: "거품 정렬(Bubble Sort)"
+date: 2024-01-20
+---
+
 # 거품 정렬(Bubble Sort)
 
 ### 개요

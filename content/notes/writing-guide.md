@@ -1,4 +1,5 @@
 ---
+unlisted: true
 title: 작성 규칙
 aliases:
   - 작성-규칙

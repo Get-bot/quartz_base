@@ -83,7 +83,7 @@ plugins:
     order: 50
     layout:
       position: right
-      priority: 30
+      priority: 10
   - source: "@quartz-community/crawl-links"
     enabled: true
     options:
@@ -114,7 +114,7 @@ plugins:
   - source: "@quartz-themes/core"
     enabled: true
     options:
-      theme: default
+      theme: minimal
       mode: both
   - source: "@quartz-community/remove-draft"
     enabled: true
@@ -162,12 +162,12 @@ plugins:
     enabled: true
     layout:
       position: left
-      priority: 50
+      priority: 30
   - source: "@quartz-community/graph"
     enabled: true
     layout:
-      position: right
-      priority: 10
+      position: afterBody
+      priority: 20
   - source: "@quartz-community/search"
     enabled: true
     layout:
@@ -180,7 +180,7 @@ plugins:
     enabled: true
     layout:
       position: right
-      priority: 50
+      priority: 30
   - source: "@quartz-community/article-title"
     enabled: true
     layout:
@@ -242,10 +242,12 @@ plugins:
       title: 최근 노트
       limit: 5
       linkToMore: false
-      showTags: true
+      showTags: false
+      hideFolderPages: true
+      hideTagPages: true
     layout:
-      position: left
-      priority: 25
+      position: afterBody
+      priority: 10
   - source: "@quartz-community/spacer"
     enabled: true
     options: {}
@@ -267,7 +269,7 @@ plugins:
         - tags
         - aliases
       excludedProperties: []
-      hidePropertiesView: false
+      hidePropertiesView: true
       delimiters: ---
       language: yaml
     order: 5

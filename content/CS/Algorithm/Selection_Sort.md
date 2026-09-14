@@ -1,3 +1,8 @@
+---
+title: "선택정렬(Selection Sort)"
+date: 2024-01-20
+---
+
 # 선택정렬(Selection Sort)
 
 ### 개요

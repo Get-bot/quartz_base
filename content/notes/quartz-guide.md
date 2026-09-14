@@ -1,4 +1,5 @@
 ---
+unlisted: true
 title: Quartz 사용법
 aliases:
   - quartz-사용법

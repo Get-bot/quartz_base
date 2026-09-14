@@ -1,3 +1,8 @@
+---
+title: "삽입 정렬(Insertion Sort)"
+date: 2024-01-20
+---
+
 # 삽입 정렬(Insertion Sort)
 
 ### 개요

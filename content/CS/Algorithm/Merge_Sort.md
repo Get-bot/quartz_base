@@ -1,3 +1,8 @@
+---
+title: "병합 정렬(Merge Sort)"
+date: 2024-01-23
+---
+
 # 병합 정렬(Merge Sort)
 
 ### 개요
