@@ -6,7 +6,7 @@ configuration:
   enablePopovers: true
   analytics: null
   locale: ko-KR
-  baseUrl: Get-bot.github.io/quartz_base
+  baseUrl: get-bot.github.io/quartz_base
   ignorePatterns:
     - private
     - templates
@@ -276,7 +276,7 @@ plugins:
       priority: 15
       display: all
   - source: "@quartz-community/obsidian-plugin-excalidraw"
-    enabled: true
+    enabled: false
     options:
       enableInteraction: true
       darkMode: auto
