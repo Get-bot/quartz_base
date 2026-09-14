@@ -232,6 +232,7 @@ plugins:
     enabled: true
     options:
       links:
+        작성 규칙: https://get-bot.github.io/quartz_base/notes/writing-guide
         GitHub: https://github.com/Get-bot/quartz_base
         Powered by Quartz: https://quartz.jzhao.xyz
     layout:

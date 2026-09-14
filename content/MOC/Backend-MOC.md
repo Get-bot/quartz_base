@@ -16,8 +16,9 @@ date: 2026-09-14
 - [[testing/index|테스트]] — 느린 테스트와 가짜 그린
 - [[architecture/index|설계]] — 경계를 어디에 그을 것인가
 - [[observability/index|관측성]] — 로그가 문제를 말해주게 하기
-- [[workflow/index|일하는 방식]] — 설계 문서 먼저, AI는 팀원처럼
-- [[books/index|책]] — 이것이 자바다, 모던 자바 인 액션
+- [[workflow/index|일하는 방식]] — 설계 문서 먼저, 결정의 이유는 Decision Log에
+- [[ai/index|AI와 일하기]] — 에이전트를 조종하는 문서와 도구, 그리고 그 함정
+- [[study/index|스터디]] — 이것이 자바다, Modern Java in Action
 - [[cs/index|CS 기초]] — 정렬과 시간 복잡도
 
 ## 실 1 — 락은 바깥으로 밀려난다
@@ -57,7 +58,17 @@ date: 2026-09-14
 - 응답 파서 선택 → Factory → [[03-user-info-factory-pattern|Provider별 응답 파싱]]
 - 도메인 경계 → Aggregate 분리, VO 추출 → [[TIL-260410-ddd-domain-design|DDD 3원칙]], [[TIL-260429-ddd-rich-domain-aggregate-vo|Rich Domain]]
 
-## 실 5 — Stateless와 Stateful 사이
+## 실 5 — 문서가 에이전트를 조종한다
+
+코드를 쓰는 주체가 에이전트로 바뀌면 문서는 참고 자료가 아니라 실행 환경이 됩니다. 문서가 틀리면 에이전트는 틀린 걸 정확하게 따릅니다.
+
+- CLAUDE.md를 라우터로, 가이드를 정본으로 → [[claude-md-router-harness-engineering|CLAUDE.md는 매뉴얼이 아니라 라우터다]] (AI와 일하기)
+- 설계 문서가 스스로 모순일 수 있다 → [[TIL-260425-pdca-1-day-cycle|양방향 Check]] (일하는 방식)
+- "왜"는 Decision Log 한 줄에 → [[TIL-260506-slice-design-decision-log|슬라이스 Design]] (일하는 방식)
+- 이걸 SDLC 전체에 놓고 보면 → [[ai-native-sdlc-playbook|AI-Native SDLC 플레이북]] (AI와 일하기)
+- 가이드를 안 읽고 코드에서 추론하면 위반을 정답으로 배운다 → [[claude-md-router-harness-engineering|두 번째 실패]]
+
+## 실 6 — Stateless와 Stateful 사이
 
 - Access는 서명만, Refresh는 저장소 → [[TIL-260422-jwt-access-refresh-hybrid|JWT 하이브리드]]
 - OAuth2 진행 상태는 세션 대신 쿠키 → [[04-cookie-based-state-csrf-spa|쿠키 기반 상태]]

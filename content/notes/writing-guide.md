@@ -8,6 +8,16 @@ tags:
 description: 이 지식베이스의 노트 작성 컨벤션
 ---
 
+이 페이지는 사이트 관리용입니다. 홈에는 노출하지 않고 푸터의 "작성 규칙" 링크로만 들어옵니다. 빌드·배포·Obsidian 연결은 [[quartz-guide|Quartz 사용법]]에 있습니다.
+
+## 노트 쓰는 흐름
+
+1. 주제에 맞는 영역 폴더에 노트를 만듭니다. TIL도 별도 폴더 없이 해당 영역에 바로 둡니다 (`TIL-YYMMDD-slug.md`)
+2. frontmatter에 `title`, `date`, `tags`, `description`을 채웁니다. `date`가 없으면 커밋일로 잡혀 최근 노트 순서가 흐트러집니다
+3. 관련 노트를 `[[위키링크]]`로 연결하고, 영역 폴더의 첫 페이지(`index.md`)에 한 줄 추가합니다. 영역을 가로지르는 이야기면 [[Backend-MOC|MOC]]에도
+4. 완성 전이면 `draft: true` — 배포에서 제외됩니다
+5. `git push` → GitHub Actions가 자동 배포
+
 ## frontmatter
 
 ```yaml
@@ -27,7 +37,7 @@ aliases:
 
 ## 폴더
 
-폴더는 **영역** 단위로만 나눕니다. 최상위 영역은 `spring/`, `database/`, `concurrency/`, `security/`, `testing/`, `architecture/`, `observability/`, `workflow/`, `books/`, `cs/` 열 개이고, 각 영역의 `index.md`가 그 폴더의 첫 페이지이자 탐색기에 표시되는 이름입니다.
+폴더는 **영역** 단위로만 나눕니다. 최상위 영역은 `spring/`, `database/`, `concurrency/`, `security/`, `testing/`, `architecture/`, `observability/`, `workflow/`, `ai/`, `study/`, `cs/` 열한 개이고, 각 영역의 `index.md`가 그 폴더의 첫 페이지이자 탐색기에 표시되는 이름입니다.
 
 | 폴더                    | 용도                                                        |
 | ----------------------- | ----------------------------------------------------------- |
@@ -39,7 +49,7 @@ aliases:
 
 영역 안에서 폴더를 더 파는 것은 시리즈나 하위 주제가 뚜렷할 때만 합니다 (`spring/core/`, `database/jpa/`, `security/oauth2/`). 그 외의 분류는 **태그와 링크로** 합니다. 어느 영역에 둘지 10초 이상 고민되면 더 자주 찾아볼 쪽에 두고, 다른 쪽 `index.md`에서 링크합니다.
 
-책 정리는 `books/<책>/chNN/index.md`로 둡니다. 챕터 폴더가 곧 페이지가 되고, 이미지는 같은 폴더의 `img/`에 둡니다.
+책 정리는 `study/<책>/chNN/index.md`로 둡니다. 챕터 폴더가 곧 페이지가 되고, 이미지는 같은 폴더의 `img/`에 둡니다.
 
 ## 파일명
 
