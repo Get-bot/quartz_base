@@ -13,6 +13,7 @@ configuration:
     - .obsidian
     - .trash
     - _setup
+    - .omc
   theme:
     fontOrigin: googleFonts
     cdnCaching: true

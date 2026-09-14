@@ -1,107 +1,64 @@
 ---
 title: 백엔드 MOC
-tags:
-  - moc
-description: 백엔드 지식베이스의 주제별 진입점
+tags: ["moc"]
+description: 폴더를 가로지르는 지도. 하나의 문제가 여러 영역을 어떻게 관통하는지.
 date: 2026-09-14
 ---
 
-MOC(Map of Content)는 목차가 아니라 **지도**입니다. 폴더는 파일이 어디 있는지만 알려주지만, 여기서는 무엇과 무엇이 이어지는지를 적습니다.
+폴더는 노트가 **어디 있는지**를, 이 지도는 노트가 **어떻게 이어지는지**를 보여줍니다. 영역별 입구는 각 폴더의 첫 페이지에 있고, 여기서는 폴더를 가로지르는 실 몇 가닥을 따라갑니다.
 
-## 데이터베이스
+## 영역별 입구
 
-인덱스와 실행계획, 스토리지 엔진, 트랜잭션.
+- [[spring/index|Spring]] — 프레임워크가 대신 해주는 것과 내가 책임질 것의 경계
+- [[database/index|데이터베이스]] — 엔진·인덱스·복제, 그리고 JPA가 얹는 추상화의 함정
+- [[concurrency/index|동시성과 대용량 트래픽]] — 선착순 쿠폰 시스템으로 배운 락·보상·부하 흡수
+- [[security/index|인증과 보안]] — 토큰을 어디에 두고 누구를 믿을 것인가
+- [[testing/index|테스트]] — 느린 테스트와 가짜 그린
+- [[architecture/index|설계]] — 경계를 어디에 그을 것인가
+- [[observability/index|관측성]] — 로그가 문제를 말해주게 하기
+- [[workflow/index|일하는 방식]] — 설계 문서 먼저, AI는 팀원처럼
+- [[books/index|책]] — 이것이 자바다, 모던 자바 인 액션
+- [[cs/index|CS 기초]] — 정렬과 시간 복잡도
 
-- [[TIL-260708-explain-cardinality-index|EXPLAIN + 카디널리티로 인덱스 잡기]]
-- [[TIL-260708-innodb-buffer-pool-sizing|InnoDB 전환 전 buffer_pool 사이징]]
-- [[TIL-260708-myisam-transaction-ignored|MyISAM은 트랜잭션을 조용히 무시한다]]
-- [[TIL-260703-codeigniter3-transaction-managed-manual|CodeIgniter3 트랜잭션 managed vs manual]]
+## 실 1 — 락은 바깥으로 밀려난다
 
-## Redis와 정합성
+선착순 쿠폰 시스템 한 편의 이야기. 병목이 발견될 때마다 락의 위치가 한 겹 바깥으로 이동합니다.
 
-캐시가 아니라 상태 저장소로 쓸 때 생기는 문제들.
+1. DB row lock이 커넥션 풀을 말린다 → [[redis-lua-first-come-coupon|Redis Lua 원자 블록]] (동시성)
+2. Redis는 지켰는데 DB INSERT가 피크에 무너진다 → [[TIL-260420-kafka-consumer-peak-load-shifting|Kafka로 시간축 분산]] (동시성)
+3. 그래도 5만 명이 동시에 오면 → [[TIL-260425-backpressure-queue-pattern|대기열, 거절 대신 지연]] (동시성)
+4. 각 단계마다 "정말 안전한가"를 증명해야 했다 → [[TIL-260521-pessimistic-write-integration-test|락 실효성 테스트]] (동시성), [[TIL-260422-testcontainers-lazy-vs-skip|Strict Parity]] (테스트)
+5. 그리고 매 단계는 하루짜리 PDCA로 → [[TIL-260425-pdca-1-day-cycle|1-day Cycle]] (일하는 방식)
 
-- [[TIL-260415-redis-lua-coupon-issue|Redis Lua 선착순 쿠폰 발급 — WRONGTYPE 버그]]
-- [[TIL-260416-redis-db-consistency-patterns|Redis-DB 정합성 패턴 5가지]]
-- [[TIL-260506-pre-check-save-race-window|사전 체크와 save 사이의 race window]]
+## 실 2 — 요청 컨텍스트는 어디에 실리는가
 
-## JPA
+"이 요청은 누구의 것이고 무엇을 했는가"를 파라미터로 끝까지 넘기지 않고 ThreadLocal에 싣는 결정을 여러 번 했습니다. 같은 도구, 다른 목적, 같은 함정(`finally { clear() }`, `@Async`에 전파되지 않음).
 
-- [[TIL-260409-kotlin-jpa-entity-pattern|Kotlin JPA Entity 패턴]]
-- [[TIL-260422-jpa-auditing-created-by|@CreatedBy 자동 주입 메커니즘]]
-- [[TIL-260521-jpa-version-detached-entity|@Version 함정과 detached entity]]
-- [[TIL-260602-kotlin-jpa-embeddable-transient|@Embeddable 파생 필드 함정]]
+- 접근 권한 → [[jooq-threadlocal-multitenancy|jOOQ 멀티테넌시]] (Spring)
+- 최근 쓰기 여부 → [[replication-lag-write-concern|Write-Concern 라우팅]] (데이터베이스)
+- 추적 식별자 → [[TIL-260429-mdc-filter-logback-json|MDC traceId]] (관측성)
+- 인증 주체 → [[TIL-260422-jpa-auditing-created-by|@CreatedBy와 SecurityContextHolder]] (Spring)
 
-## 도메인 설계
+## 실 3 — 조용한 실패
 
-객체지향 원론에서 시작해 DDD 실전까지.
+에러를 내지 않아서 더 위험한 것들.
 
-- [[객체지향 패러다임의 핵심 역할(Role) 책임(Responsibility) 협력(Collaboration)|역할 · 책임 · 협력]]
-- [[설계 품질과 트레이드오프]]
-- [[TIL-260410-ddd-domain-design|DDD 도메인 설계 3원칙]]
-- [[TIL-260429-ddd-rich-domain-aggregate-vo|Rich Domain — Aggregate 분리와 금융 VO]]
+- MyISAM은 트랜잭션을 무시하고 성공을 돌려준다 → [[TIL-260708-myisam-transaction-ignored|MyISAM]]
+- Spring Data의 `@Version`은 락을 걸지 않고도 컴파일된다 → [[TIL-260521-jpa-version-detached-entity|@Version 함정]]
+- `@Embeddable`의 init 블록은 no-arg 재로드에서 돌지 않는다 → [[TIL-260602-kotlin-jpa-embeddable-transient|@Embeddable 파생 필드]]
+- Mockito stub은 인자가 다르면 아무 말 없이 무시된다 → [[mockmvc-argument-matching|MockMvc 인자 매칭]]
+- 조건부 skip은 통과처럼 보인다 → [[TIL-260422-testcontainers-lazy-vs-skip|Skip 대신 Lazy]]
+- P6Spy는 라우팅 DataSource를 감싸 Master로만 보낸다 → [[replication-lag-write-concern|Write-Concern 패턴]]
 
-## 대용량 트래픽
+## 실 4 — 패턴을 꺼낸 시점과 이유
 
-부하를 흡수할 것인가, 거절할 것인가.
+- 순차 검사·중단 → Chain of Responsibility, Strategy 아님 → [[chain-of-responsibility-fraud-detection|이상거래 감지]]
+- Provider별 분기 → Strategy → [[02-multi-provider-strategy-pattern|OAuth2 멀티 Provider]]
+- 응답 파서 선택 → Factory → [[03-user-info-factory-pattern|Provider별 응답 파싱]]
+- 도메인 경계 → Aggregate 분리, VO 추출 → [[TIL-260410-ddd-domain-design|DDD 3원칙]], [[TIL-260429-ddd-rich-domain-aggregate-vo|Rich Domain]]
 
-- [[TIL-260420-kafka-consumer-peak-load-shifting|Kafka Consumer로 Peak Load Shifting]]
-- [[TIL-260425-backpressure-queue-pattern|Backpressure 패턴 — Queue ≠ Rate Limiter]]
+## 실 5 — Stateless와 Stateful 사이
 
-## 인증과 보안
-
-- [[TIL-260422-jwt-access-refresh-hybrid|JWT Access+Refresh 하이브리드]]
-- [[TIL-260429-aes-gcm-rbac-aop|AES-GCM 컬럼 암호화 + @RequireRole AOP]]
-- [[TIL-260602-alb-nginx-xff-client-ip|ALB · nginx 뒤에서 진짜 Client IP 잡기]]
-
-## 테스트
-
-느린 테스트와 거짓 통과를 잡는 법.
-
-- [[TIL-260414-kotest6-describespec-withdata|Kotest 6 DescribeSpec + withData]]
-- [[TIL-260414-springmockk-gap-analysis|springmockk와 Gap Analysis]]
-- [[TIL-260422-testcontainers-lazy-vs-skip|Testcontainers — Skip 대신 Lazy]]
-- [[TIL-260521-pessimistic-write-integration-test|PESSIMISTIC_WRITE 실효성 검증]]
-- [[TIL-260602-spring-test-context-cache-key|통합테스트가 느린 진짜 이유]]
-- [[TIL-260429-test-infra-fixture-cleanup|테스트 인프라 정비]]
-
-## 관측성과 운영
-
-- [[TIL-260429-mdc-filter-logback-json|MDC 필터로 traceId 일원화]]
-- [[TIL-260506-logback-replace-turbofilter|Logback %replace + TurboFilter]]
-- [[TIL-260602-profile-vs-feature-toggle|환경 프로필을 기능 토글로 쓰면 안 되는 이유]]
-
-## Spring 기초
-
-- [[Spring Framework가 필요한 이유|Spring이 필요한 이유]]
-- [[강한결합과 느슨한결합|강한 결합과 느슨한 결합]]
-- [[IoC and DI]]
-- [[Spring Container]]
-- [[Spring Annotation]]
-- [[AOP]]
-
-## Java
-
-- [[TIL-260411-spring-boot-kotlin-patterns|Spring Boot + Kotlin 관용 패턴]]
-- [[TIL-260412-kotlin-spring-code-quality|Kotlin/Spring 코드 품질 패턴]]
-- [[TIL-260429-swagger-device-id-editorconfig|Swagger X-Device-Id 주입과 .editorconfig]]
-
-### 이것이 자바다
-
-[[this-is-java/ch02/Readme|2. 변수와 타입]] · [[this-is-java/ch03/Readme|3. 연산자]] · [[this-is-java/ch12/Readme|12. java.base 모듈]] · [[this-is-java/ch13/Readme|13. 제네릭]] · [[this-is-java/ch14/Readme|14. 멀티 스레드]] · [[this-is-java/ch15/Readme|15. 컬렉션 자료구조]] · [[this-is-java/ch16/Readme|16. 람다식]] · [[this-is-java/ch17/Readme|17. 스트림과 병렬 처리]]
-
-### 모던 자바 인 액션
-
-[[modern_java_in_action/ch05_스트림_활용/Readme|5. 스트림 활용]] · [[modern_java_in_action/ch06_스트림으로_데이터_수집/Readme|6. 스트림으로 데이터 수집]] · [[modern_java_in_action/ch07_병렬_데이터_처리와_성능/Readme|7. 병렬 데이터 처리와 성능]] · [[modern_java_in_action/ch08_컬렉션_API_개선/Readme|8. 컬렉션 API 개선]] · [[modern_java_in_action/ch09_리팩터링_테스팅_디버깅/Readme|9. 리팩터링, 테스팅, 디버깅]]
-
-## 알고리즘
-
-- [[Time_Complexity|시간 복잡도]]
-- [[Bubble_Sort|거품 정렬]] · [[Selection_Sort|선택 정렬]] · [[Insertion_Sort|삽입 정렬]] · [[Merge_Sort|병합 정렬]]
-
-## 일하는 방식
-
-- [[TIL-260425-pdca-1-day-cycle|PDCA 1-day Cycle]]
-- [[TIL-260506-slice-design-decision-log|슬라이스 Design 작성법]]
-- [[TIL-260412-simplify-skill-doc-dedup|스킬 문서 중복 제거와 정본화]]
-- [[TIL-260409-claude-custom-skill-til-manager|Claude Custom Skill 개발]]
+- Access는 서명만, Refresh는 저장소 → [[TIL-260422-jwt-access-refresh-hybrid|JWT 하이브리드]]
+- OAuth2 진행 상태는 세션 대신 쿠키 → [[04-cookie-based-state-csrf-spa|쿠키 기반 상태]]
+- 그 쿠키를 프록시 뒤에서 IP와 함께 믿으려면 → [[TIL-260602-alb-nginx-xff-client-ip|진짜 Client IP]]
