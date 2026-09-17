@@ -26,6 +26,10 @@ date: 2026-09-14
 
 - [[TIL-260602-alb-nginx-xff-client-ip|ALB·nginx 뒤에서 진짜 Client IP 잡기]] — `forward-headers-strategy=native` 없이는 XFF 스푸핑에 뚫린다. RemoteIpValve는 오른쪽에서 왼쪽으로 벗긴다
 
+## 에이전트에게 명령 실행을 맡길 때
+
+- [[TIL-260911-command-classifier-argv-rules|정규식은 argv의 위치를 모른다]] — `cp /dev/null /etc/passwd`를 잡으려면 목적지가 몇 번째 인자인지 봐야 한다. 경로 봉쇄에서 `path.resolve`가 심링크를 못 막는 것도 같은 실수
+
 ## 다음에 채울 자리
 
 - 2FA를 붙였을 때 Replay 탐지 정책이 어떻게 바뀌는지 — [[TIL-260422-jwt-access-refresh-hybrid|JWT 하이브리드]]의 액션플랜
