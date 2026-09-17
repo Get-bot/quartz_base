@@ -17,6 +17,7 @@ date: 2026-09-14
 - [[TIL-260409-claude-custom-skill-til-manager|Claude Custom Skill 개발 — TIL Manager]] — 이 지식베이스의 TIL이 만들어지는 파이프라인
 - [[TIL-260412-simplify-skill-doc-dedup|스킬 문서 중복 제거와 정본화]] — 문서에도 Single Source of Truth
 - [[TIL-260708-wsl-mysql-mcp-unc-path|Windows + WSL MySQL MCP UNC 경로 함정]]
+- [[TIL-260911-mcp-stdio-stdout-guard|MCP 서버의 stdout은 프로토콜 채널이다]] — console.log 한 줄이 JSON-RPC를 깨뜨린다. 그렇다고 process.stdout.write를 막으면 서버 응답까지 같이 막힌다
 
 ## 반복해서 나오는 원칙
 
