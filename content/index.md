@@ -19,5 +19,5 @@ date: 2026-09-14
 - **[[observability/index|관측성]]** `observability/` — MDC, Logback 구조화 로깅
 - **[[workflow/index|일하는 방식]]** `workflow/` — PDCA, 설계 문서, Decision Log
 - **[[ai/index|AI와 일하기]]** `ai/` — CLAUDE.md 설계, 스킬·플러그인, 하네스 엔지니어링, AI-Native SDLC
-- **[[study/index|스터디]]** `study/` — 이것이 자바다, Modern Java in Action
+- **[[study/index|스터디]]** `study/` — 이것이 자바다, Modern Java in Action, Kotlin in Action
 - **[[cs/index|CS 기초]]** `cs/` — 정렬 알고리즘, 시간 복잡도

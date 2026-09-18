@@ -18,7 +18,7 @@ date: 2026-09-14
 - [[observability/index|관측성]] — 로그가 문제를 말해주게 하기
 - [[workflow/index|일하는 방식]] — 설계 문서 먼저, 결정의 이유는 Decision Log에
 - [[ai/index|AI와 일하기]] — 에이전트를 조종하는 문서와 도구, 그리고 그 함정
-- [[study/index|스터디]] — 이것이 자바다, Modern Java in Action
+- [[study/index|스터디]] — 이것이 자바다, Modern Java in Action, Kotlin in Action
 - [[cs/index|CS 기초]] — 정렬과 시간 복잡도
 
 ## 실 1 — 락은 바깥으로 밀려난다
