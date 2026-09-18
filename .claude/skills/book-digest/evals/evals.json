@@ -1,0 +1,23 @@
+{
+  "skill_name": "book-digest",
+  "notes": "실행은 레포 복사본에서 한다. 라이브 content/를 덮어쓰지 않기 위해서다. 실행·채점 하네스(build_benchmark.py, grade_book_digest.py, iteration-N/)는 레포에 두지 않고 `.omc/book-digest-workspace/`(gitignore 대상)에 있다. 이 파일은 eval 정의만 갖는다.",
+  "evals": [
+    {
+      "id": 0,
+      "name": "ch01-existing-digest",
+      "prompt": "코틀린 인 액션 1장 읽으면서 적은 게 content/private/kotlin-in-action-ch01-raw.md 에 있어. 이거 원문 형식으로 정돈하고, study/kotlin-in-action/ch01/index.md 정리본으로 만들어줘. 넘어간 절도 정리하고 문체는 humanize-korean으로 다듬어줘.",
+      "expected_output": "raw가 절 지도 형식으로 정돈되고(문장은 그대로, 책 문장에 별도 표기 없음, '걸린 것'·'다음 장으로 미룬 것' 절 없음), 기존 손글씨 정리본의 '남은 것'·'넘어간 것'은 글자 그대로 보존된 채 주장 단위 H2 절이 채워진 정리본, 뺀 노트가 없으므로 '여기서 나온 노트' 절 없음, 정리본에 바깥 노트로 나가는 링크 없음, humanize 통과, verify FAIL 0, 영역 노트는 후보 제안만.",
+      "files": [
+        "content/private/kotlin-in-action-ch01-raw.md (자유 형식 raw)",
+        "content/study/kotlin-in-action/ch01/index.md (손글씨 얇은 정리본)"
+      ]
+    },
+    {
+      "id": 1,
+      "name": "ch02-pasted-notes",
+      "prompt": "코틀린 인 액션 2장 메모야. 지식베이스에 정리본으로 넣어줘. 문체는 humanize로.\n\n목차는 2.1 기본 요소: 함수와 변수 / 2.2 클래스와 프로퍼티 / 2.3 enum과 when / 2.4 while과 for 루프 / 2.5 예외 / 2.6 요약. 2.5는 자바랑 같아서 안 읽었고 2.4는 훑기만 했어.\n\n함수 선언 fun, 식이 본문인 함수는 = 뒤에 바로 식. 반환 타입 생략 가능 (타입 추론). 블록 본문이면 return 명시해야함\nval 불변 참조 / var 변경 가능. 기본은 val, 필요할때만 var\nval 참조는 불변이지만 가리키는 객체 내부는 바뀔 수 있음 (val list = mutableListOf)\n문자열 템플릿 \"$name\" \"${a.b}\" — 한글 뒤에 변수 붙일땐 중괄호 써야함\n클래스: 프로퍼티가 필드+접근자. val 은 getter만, var 은 getter+setter\n커스텀 접근자 val isSquare: Boolean get() = height == width\n> 책: \"코틀린에서는 프로퍼티가 언어 기본 기능이고 자바의 필드와 접근자 메서드를 완전히 대신한다\"\nenum class 는 enum 이 소프트 키워드. 상수마다 프로퍼티 가질수 있고 메서드 정의하면 상수 목록 뒤에 세미콜론 (코틀린에서 세미콜론 필수인 유일한 곳)\nwhen 은 switch 대체. 인자 없는 when 도 됨. 분기에 임의 객체 사용 가능 setOf(RED, YELLOW)\n스마트 캐스트: is 로 검사하면 컴파일러가 캐스팅 해줌. val 이고 커스텀 접근자 없을때만\nif 도 식이다 (자바는 문). when 도 식\n루프: for 는 range 만. 1..10 닫힌구간, until, downTo, step. in / !in 으로 컬렉션 범위 검사\n맵 이터레이션 for ((k, v) in map)",
+      "expected_output": "붙여넣은 메모가 private/kotlin-in-action-ch02-raw.md 로 저장되며 절 지도(2.4 [~], 2.5 [ ])가 생기고 책 문장에는 별도 표기를 붙이지 않으며, 손글씨 정리본이 없으므로 '남은 것'은 모델이 고른 초안임을 보고에 밝히며, 주장 단위 정리본 + 책 index 2장 행 + study/index.md 제안 문장, humanize 통과, verify FAIL 0.",
+      "files": []
+    }
+  ]
+}
