@@ -1,6 +1,6 @@
 ---
 title: 스터디
-description: 챕터 단위로 정리한 기술서. 이것이 자바다, Modern Java in Action.
+description: 챕터 단위로 정리한 기술서. 이것이 자바다, Modern Java in Action, Kotlin in Action.
 date: 2026-09-14
 ---
 
@@ -8,5 +8,8 @@ date: 2026-09-14
 
 - [[이것이-자바다/index|이것이 자바다]] — 2·3장 기초, 12~17장(java.base, 제네릭, 멀티 스레드, 컬렉션, 람다, 스트림)
 - [[modern-java-in-action/index|Modern Java in Action]] — 5~9장(스트림 활용, 데이터 수집, 병렬 처리, 컬렉션 API, 리팩터링·테스팅·디버깅)
+- [[kotlin-in-action/index|Kotlin in Action]] — 1장(코틀린이란 무엇이며 왜 필요한가?)
+
+『Kotlin in Action』은 2026년 9월부터 읽기 시작해 `kotlin-in-action/`에 정리하는 중입니다. 2장부터 이어집니다.
 
 『오브젝트』는 3·4장까지만 정리한 상태라 공개하지 않고 `오브젝트/`에 초안(`draft: true`)으로 두었습니다. 더 읽으면 다시 엽니다.
