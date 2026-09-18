@@ -21,7 +21,7 @@ humanize-korean 자체는 `_workspace/YYYY-MM-DD-NNN/`을 cwd에 만든다. 폴�
 
 ```
 python <skill-dir>/scripts/humanize_io.py prepare \
-  --note content/study/<book>/chNN/index.md \
+  --note content/study/<book>/chNN.md \
   --out-dir _workspace/book-digest/<book>-chNN
 ```
 

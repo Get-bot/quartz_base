@@ -12,7 +12,7 @@ chapter: 1
 date: 2026-09-18                # 읽은/적은 날. 정리본 date와 같아도 된다
 tags: ["kotlin", "raw"]
 status: digested                # raw | digested — 정리본을 만들었으면 digested
-digest: study/kotlin-in-action/ch01/index
+digest: study/kotlin-in-action/ch01
 ---
 ```
 
@@ -21,7 +21,7 @@ digest: study/kotlin-in-action/ch01/index
 ## 본문
 
 ```markdown
-<!-- 정리본: [[study/kotlin-in-action/ch01/index]]
+<!-- 정리본: [[study/kotlin-in-action/ch01]]
      책을 보면서 적은 전사. 공개하지 않는다. -->
 
 ## 절 지도

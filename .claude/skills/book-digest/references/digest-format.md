@@ -1,6 +1,6 @@
 # 정리본(digest) 형식 — 챕터 노트
 
-위치 `content/study/<book>/chNN/index.md`. 챕터 폴더가 곧 페이지가 된다. 이미지는 같은 폴더 `img/`.
+위치 `content/study/<book>/chNN.md`. 폴더(`chNN/index.md`)로 두면 recent-notes의 `hideFolderPages`에 걸려 최근 노트에서 빠진다. 이미지는 `content/study/<book>/img/chNN/`에 두고 절대 경로로 참조한다.
 
 ## 뼈대
 
@@ -69,7 +69,7 @@ raw 절 지도의 `[ ]`·`[~]` 항목 전부. `- N.n 제목 — 이유`. 이유�
 ```markdown
 | 장  | 노트 | 남은 것 |
 | --- | ---- | ------- |
-| 1 | [[kotlin-in-action/ch01/index\|코틀린이란 무엇이며 왜 필요한가?]] | 컴파일 시점으로 당긴다 |
+| 1 | [[kotlin-in-action/ch01\|코틀린이란 무엇이며 왜 필요한가?]] | 컴파일 시점으로 당긴다 |
 ```
 
 "남은 것" 열은 정리본 '이 장에서 남은 것' 첫 불릿의 핵심 구절 하나. 문장 말고 구절.

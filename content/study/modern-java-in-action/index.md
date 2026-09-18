@@ -8,8 +8,8 @@ date: 2026-09-14
 
 | 장  | 노트                                                          | 한 줄                                            |
 | --- | ------------------------------------------------------------- | ------------------------------------------------ |
-| 5   | [[modern-java-in-action/ch05/index\|스트림 활용]]               | 필터링·슬라이싱·매핑·리듀싱, 숫자 스트림          |
-| 6   | [[modern-java-in-action/ch06/index\|스트림으로 데이터 수집]]    | Collectors, 그룹화·분할, Collector 직접 구현     |
-| 7   | [[modern-java-in-action/ch07/index\|병렬 데이터 처리와 성능]]   | 병렬 스트림의 함정, 포크/조인, Spliterator        |
-| 8   | [[modern-java-in-action/ch08/index\|컬렉션 API 개선]]           | 컬렉션 팩토리, Map 처리 API                      |
-| 9   | [[modern-java-in-action/ch09/index\|리팩터링, 테스팅, 디버깅]]  | 람다로 디자인 패턴 개선, 람다 테스팅              |
+| 5   | [[modern-java-in-action/ch05\|스트림 활용]]               | 필터링·슬라이싱·매핑·리듀싱, 숫자 스트림          |
+| 6   | [[modern-java-in-action/ch06\|스트림으로 데이터 수집]]    | Collectors, 그룹화·분할, Collector 직접 구현     |
+| 7   | [[modern-java-in-action/ch07\|병렬 데이터 처리와 성능]]   | 병렬 스트림의 함정, 포크/조인, Spliterator        |
+| 8   | [[modern-java-in-action/ch08\|컬렉션 API 개선]]           | 컬렉션 팩토리, Map 처리 API                      |
+| 9   | [[modern-java-in-action/ch09\|리팩터링, 테스팅, 디버깅]]  | 람다로 디자인 패턴 개선, 람다 테스팅              |

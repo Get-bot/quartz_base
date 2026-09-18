@@ -189,7 +189,7 @@ def main():
     content = root / "content"
     ch = f"ch{a.chapter:02d}"
     raw_p = content / "private" / f"{a.book}-{ch}-raw.md"
-    dig_p = content / "study" / a.book / ch / "index.md"
+    dig_p = content / "study" / a.book / f"{ch}.md"
     bidx_p = content / "study" / a.book / "index.md"
     rep = Report()
     rep.info("paths", f"root={root} raw={raw_p.relative_to(root)} digest={dig_p.relative_to(root)}")
@@ -213,7 +213,7 @@ def main():
             rep.fail("raw-fm", f"raw chapter='{raw_fm.get('chapter')}' ≠ {a.chapter}")
         if raw_fm.get("status") != "digested":
             rep.warn("raw-fm", f"raw status='{raw_fm.get('status')}' — 정리본을 만들었으면 digested 로")
-        want_digest = f"study/{a.book}/{ch}/index"
+        want_digest = f"study/{a.book}/{ch}"
         if raw_fm.get("digest") and str(raw_fm["digest"]).strip("/") != want_digest:
             rep.warn("raw-fm", f"raw digest='{raw_fm['digest']}' ≠ '{want_digest}'")
 
@@ -338,7 +338,7 @@ def main():
         rep.fail("book-index", f"책 index 없음: {bidx_p}")
     else:
         bt = read(bidx_p)
-        row = re.search(rf"^\|\s*{a.chapter}\s*\|.*{ch}/index", bt, re.M)
+        row = re.search(rf"^\|\s*{a.chapter}\s*\|.*{ch}(?![\w/])", bt, re.M)
         (rep.ok if row else rep.fail)("book-index", f"책 index 표에 {a.chapter}장 행 " + ("있음" if row else "없음"))
         check_links(bt, idx, rep, "책 index")
 

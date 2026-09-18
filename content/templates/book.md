@@ -6,7 +6,7 @@ description: 이 장을 관통하는 한 문장
 draft: true
 ---
 
-<!-- 정리본(content/study/<책>/chNN/index.md)이다. 원문을 읽고, 덮고, 내 말로 쓴다.
+<!-- 정리본(content/study/<책>/chNN.md)이다. 원문을 읽고, 덮고, 내 말로 쓴다.
      소제목은 책의 절이 아니라 이 장이 하는 주장이고, 그 아래 본문에는 그 장이 가르친 개념이 들어간다.
      주장만 있으면 나중에 찾아볼 것이 없고, 개념만 있으면 전사다. 원문 뼈대는 이 파일 맨 아래에 있다. -->
 
@@ -50,7 +50,7 @@ chapter: 1
 date: 2026-09-18
 tags: ["kotlin", "raw"]
 status: raw
-digest: study/kotlin-in-action/ch01/index
+digest: study/kotlin-in-action/ch01
 ---
 
 ## 절 지도

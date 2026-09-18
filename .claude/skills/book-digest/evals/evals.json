@@ -5,11 +5,11 @@
     {
       "id": 0,
       "name": "ch01-existing-digest",
-      "prompt": "코틀린 인 액션 1장 읽으면서 적은 게 content/private/kotlin-in-action-ch01-raw.md 에 있어. 이거 원문 형식으로 정돈하고, study/kotlin-in-action/ch01/index.md 정리본으로 만들어줘. 넘어간 절도 정리하고 문체는 humanize-korean으로 다듬어줘.",
+      "prompt": "코틀린 인 액션 1장 읽으면서 적은 게 content/private/kotlin-in-action-ch01-raw.md 에 있어. 이거 원문 형식으로 정돈하고, study/kotlin-in-action/ch01.md 정리본으로 만들어줘. 넘어간 절도 정리하고 문체는 humanize-korean으로 다듬어줘.",
       "expected_output": "raw가 절 지도 형식으로 정돈되고(문장은 그대로, 책 문장에 별도 표기 없음, '걸린 것'·'다음 장으로 미룬 것' 절 없음), 기존 손글씨 정리본의 '남은 것'·'넘어간 것'은 글자 그대로 보존된 채 주장 단위 H2 절이 채워진 정리본, 뺀 노트가 없으므로 '여기서 나온 노트' 절 없음, 정리본에 바깥 노트로 나가는 링크 없음, humanize 통과, verify FAIL 0, 영역 노트는 후보 제안만.",
       "files": [
         "content/private/kotlin-in-action-ch01-raw.md (자유 형식 raw)",
-        "content/study/kotlin-in-action/ch01/index.md (손글씨 얇은 정리본)"
+        "content/study/kotlin-in-action/ch01.md (손글씨 얇은 정리본)"
       ]
     },
     {

@@ -14,7 +14,7 @@ merge   : humanize 결과(final.md)에서 HUMANIZE-SUMMARY 블록을 떼고, 코
           실패한 치명 오류에서는 --force 가 없는 한 덮어쓰지 않는다.
 
 사용:
-  python humanize_io.py prepare --note content/study/<book>/chNN/index.md --out-dir _workspace/book-digest/<book>-chNN
+  python humanize_io.py prepare --note content/study/<book>/chNN.md --out-dir _workspace/book-digest/<book>-chNN
   python humanize_io.py merge   --out-dir _workspace/book-digest/<book>-chNN --humanized _workspace/<run_id>/final.md [--write] [--force]
 
 exit: prepare 0 / merge 0 = 롤백 없음, 1 = 절 롤백 있음(merged.md는 유효), 2 = 치명 실패
