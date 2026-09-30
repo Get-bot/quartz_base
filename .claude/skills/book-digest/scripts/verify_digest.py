@@ -13,7 +13,7 @@
   template   정리본에 템플릿 안내문이 남아 있는지 (raw를 study/ 에 쓴 채로 두면 여기서 걸린다)
   skipped    절 지도의 [ ]/[~] 항목이 정리본 '넘어간 것'에 전부 있는지, 이유가 비어 있는지
   extracted  '여기서 나온 노트' 절이 있다면 실제로 뺀 노트를 링크하고 있는지 (빈 절이면 절을 지운다)
-  code       정리본 코드블록의 줄이 전부 raw 코드블록에 있는지(앞뒤 공백 무시, `// ...` 생략 줄 허용), 블록 수(3개 초과 WARN)
+  code       정리본 코드블록의 줄이 전부 raw 코드블록에 있는지(앞뒤 공백 무시, `// ...` 생략 줄 허용), 블록 수(보고용 — 상한 없음)
              줄 단위 대조라 raw의 서로 다른 블록에서 줄을 섞어 와도 통과한다. 지어낸 줄을 잡는 검사다
   transcript 정리본 문장 중 raw와 글자 그대로 같은 비율 (보고용 — 책 문장을 옮겨도 되므로 판정하지 않는다. 코드블록은 세지 않는다)
   links      정리본·책 index 의 [[위키링크]]가 content/ 안에서 해소되는지 (경로·파일명·alias·접미 매칭)
@@ -41,7 +41,6 @@ FIXED_HEADINGS = ("이 장에서 남은 것", "넘어간 것", "여기서 나온
 # 들여쓴 펜스(불릿 안 코드블록)와 4백틱 이상 펜스도 코드블록이다. 0열만 보면 그 안의 코드가 검사를 빠져나간다.
 FENCE_RE = re.compile(r"^[ \t]*(`{3,}|~{3,})[^\n]*\n(.*?)^[ \t]*\1[ \t]*$", re.S | re.M)
 ELIDE_RE = re.compile(r"^//\s*\.\.\.$")
-MAX_CODE_BLOCKS = 3
 # content/templates/book.md 의 안내문. 정리본에 남으면 템플릿을 채우다 만 것이다.
 TEMPLATE_PHRASES = (
     "책을 덮고 나서도 기억나는 것 3~5줄",
@@ -405,10 +404,7 @@ def main():
             )
         elif dig_code:
             rep.ok("code", f"코드블록 {len(dig_code)}개, 모든 줄이 raw 코드블록에 있음")
-        if len(dig_code) > MAX_CODE_BLOCKS:
-            rep.warn("code", f"코드블록 {len(dig_code)}개 — 장당 1~{MAX_CODE_BLOCKS}블록")
-        else:
-            rep.info("code", f"코드블록 {len(dig_code)}개")
+        rep.info("code", f"코드블록 {len(dig_code)}개")
 
         rnorm = norm(strip_non_content(raw_body))
         sents = []

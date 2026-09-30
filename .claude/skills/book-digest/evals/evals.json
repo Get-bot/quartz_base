@@ -23,7 +23,7 @@
       "id": 2,
       "name": "ch04-raw-in-study",
       "prompt": "코틀린 인 액션 4장 정리해줘. study/kotlin-in-action/ch04.md 에 템플릿 깔고 그 위에 메모랑 코드 적어뒀어.",
-      "expected_output": "Phase 0이 ch04.md를 정리본이 아니라 raw로 판별하고(주석 밖 `## 4.1` H2, 템플릿 안내문), 파일 그대로를 _workspace/book-digest/kotlin-in-action-ch04/raw.original.md 로 백업한다. 템플릿 잔재(안내문·빈 불릿·원문 뼈대 주석)를 버리고 private/kotlin-in-action-ch04-raw.md 로 정리한다: 절 지도는 초안을 제안하고 확인받고, 첫 절 앞 메모는 `## 도입`, 오탈자(overried·pulbic·가싱성·짦은) 교정, 명사형 메모를 해라체로 끝맺되 메모 불릿 수와 뜻 유지, 코드는 줄 끝 공백 제거와 `// I'm focusable!}` 붙여넣기 오류 수정만 하고 전/후를 보고한다. study/ch04.md는 주장 단위 정리본으로 덮어쓰고, 코드블록 1~3개는 raw 코드블록 발췌(verify code PASS), 건너뛴 절이 없으면 '넘어간 것' 절 없음, 템플릿 안내문 없음(verify template 통과), raw-code는 붙여넣기 오류를 고친 블록만 WARN, verify FAIL 0.",
+      "expected_output": "Phase 0이 ch04.md를 정리본이 아니라 raw로 판별하고(주석 밖 `## 4.1` H2, 템플릿 안내문), 파일 그대로를 _workspace/book-digest/kotlin-in-action-ch04/raw.original.md 로 백업한다. 템플릿 잔재(안내문·빈 불릿·원문 뼈대 주석)를 버리고 private/kotlin-in-action-ch04-raw.md 로 정리한다: 절 지도는 초안을 제안하고 확인받고, 첫 절 앞 메모는 `## 도입`, 오탈자(overried·pulbic·가싱성·짦은) 교정, 명사형 메모를 해라체로 끝맺되 메모 불릿 수와 뜻 유지, 코드는 줄 끝 공백 제거와 `// I'm focusable!}` 붙여넣기 오류 수정만 하고 전/후를 보고한다. study/ch04.md는 주장 단위 정리본으로 덮어쓰고, 코드블록은 전부 raw 코드블록 발췌(verify code PASS), 건너뛴 절이 없으면 '넘어간 것' 절 없음, 템플릿 안내문 없음(verify template 통과), raw-code는 붙여넣기 오류를 고친 블록만 WARN, verify FAIL 0.",
       "files": [
         "content/study/kotlin-in-action/ch04.md (템플릿 + 위쪽 raw 메모와 코드블록, untracked — 사용자가 계속 쓰는 중)"
       ]
