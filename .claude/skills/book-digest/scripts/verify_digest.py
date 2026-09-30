@@ -7,10 +7,15 @@
 
 검사:
   raw        frontmatter(book/chapter/status), '## 절 지도' 와 체크 항목
+  raw-code   원본 백업(_workspace/book-digest/<book>-chNN/raw.original.md)이 있으면 raw 코드블록이 원본과 같은지
+             (줄 끝 공백·언어 태그 무시. 다르면 WARN — Phase 1 보고의 오타·붙여넣기 오류 수정 목록과 맞춰 본다)
   digest     frontmatter 필수 필드·태그 kebab-case, '이 장에서 남은 것' 3~5불릿, 주장 절이 절 번호로 시작하지 않는지
+  template   정리본에 템플릿 안내문이 남아 있는지 (raw를 study/ 에 쓴 채로 두면 여기서 걸린다)
   skipped    절 지도의 [ ]/[~] 항목이 정리본 '넘어간 것'에 전부 있는지, 이유가 비어 있는지
   extracted  '여기서 나온 노트' 절이 있다면 실제로 뺀 노트를 링크하고 있는지 (빈 절이면 절을 지운다)
-  transcript 정리본 문장 중 raw와 글자 그대로 같은 비율 (보고용 — 책 문장을 옮겨도 되므로 판정하지 않는다)
+  code       정리본 코드블록의 줄이 전부 raw 코드블록에 있는지(앞뒤 공백 무시, `// ...` 생략 줄 허용), 블록 수(3개 초과 WARN)
+             줄 단위 대조라 raw의 서로 다른 블록에서 줄을 섞어 와도 통과한다. 지어낸 줄을 잡는 검사다
+  transcript 정리본 문장 중 raw와 글자 그대로 같은 비율 (보고용 — 책 문장을 옮겨도 되므로 판정하지 않는다. 코드블록은 세지 않는다)
   links      정리본·책 index 의 [[위키링크]]가 content/ 안에서 해소되는지 (경로·파일명·alias·접미 매칭)
   book-index study/<book>/index.md 표에 이 장 행이 있는지
   residue    윤문 잔재 주석(HUMANIZE-SUMMARY / KEEP / SECTION)
@@ -21,6 +26,7 @@ import argparse
 import json
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -32,6 +38,20 @@ TAG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SEC_NUM_RE = re.compile(r"(?<![\d.])(\d+\.\d+(?:\.\d+)?)(?![\d.])")
 MAP_ITEM_RE = re.compile(r"^\s*-\s*\[( |x|X|~)\]\s*(.+?)\s*$", re.M)
 FIXED_HEADINGS = ("이 장에서 남은 것", "넘어간 것", "여기서 나온 노트")
+# 들여쓴 펜스(불릿 안 코드블록)와 4백틱 이상 펜스도 코드블록이다. 0열만 보면 그 안의 코드가 검사를 빠져나간다.
+FENCE_RE = re.compile(r"^[ \t]*(`{3,}|~{3,})[^\n]*\n(.*?)^[ \t]*\1[ \t]*$", re.S | re.M)
+ELIDE_RE = re.compile(r"^//\s*\.\.\.$")
+MAX_CODE_BLOCKS = 3
+# content/templates/book.md 의 안내문. 정리본에 남으면 템플릿을 채우다 만 것이다.
+TEMPLATE_PHRASES = (
+    "책을 덮고 나서도 기억나는 것 3~5줄",
+    "## 주장 하나를 문장으로",
+    "그 주장이 딛고 선 개념부터",
+    "이름만 나열하면 나중에 찾아올 값이 없다",
+    "읽지 않았거나 훑기만 한 절",
+    "○○○",
+    "노트-파일명",
+)
 
 
 def read(p: Path) -> str:
@@ -72,7 +92,7 @@ def sections(body):
     """H2 제목 → 본문. 코드블록 안의 '## ' 무시."""
     out, cur, in_code = {}, None, False
     for ln in body.split("\n"):
-        if ln.startswith("```") or ln.startswith("~~~"):
+        if ln.lstrip().startswith(("```", "~~~")):
             in_code = not in_code
         if not in_code and ln.startswith("## "):
             cur = ln[3:].strip()
@@ -162,10 +182,28 @@ def resolve(target, idx):
     return any(k.endswith(suffix) for k in idx if "/" in k)
 
 
+def strip_comments(text):
+    return re.sub(r"<!--.*?-->", "", text, flags=re.S)
+
+
 def strip_non_content(text):
     """HTML 주석·코드블록 안의 링크는 검사하지 않는다 (템플릿 예시·설명용)."""
-    text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
-    return re.sub(r"^(```|~~~)[^\n]*\n.*?^\1[ \t]*$", "", text, flags=re.S | re.M)
+    return FENCE_RE.sub("", strip_comments(text))
+
+
+def code_blocks(text):
+    """코드블록 본문 목록. 줄 끝 공백과 앞뒤 빈 줄을 걷어낸다. HTML 주석 안의 블록은 뺀다."""
+    return ["\n".join(ln.rstrip() for ln in m.group(2).strip("\n").split("\n"))
+            for m in FENCE_RE.finditer(strip_comments(text))]
+
+
+def code_lines(blocks):
+    """코드블록들의 비어 있지 않은 줄(앞뒤 공백 제거). 줄 단위 대조에 쓴다."""
+    return [ln.strip() for b in blocks for ln in b.split("\n") if ln.strip()]
+
+
+def first_line(block):
+    return next((ln.strip() for ln in block.split("\n") if ln.strip()), "")[:50]
 
 
 def check_links(text, idx, rep, label):
@@ -191,6 +229,7 @@ def main():
     raw_p = content / "private" / f"{a.book}-{ch}-raw.md"
     dig_p = content / "study" / a.book / f"{ch}.md"
     bidx_p = content / "study" / a.book / "index.md"
+    orig_p = root / "_workspace" / "book-digest" / f"{a.book}-{ch}" / "raw.original.md"
     rep = Report()
     rep.info("paths", f"root={root} raw={raw_p.relative_to(root)} digest={dig_p.relative_to(root)}")
 
@@ -200,6 +239,7 @@ def main():
 
     # ---------------------------------------------------------------- raw
     raw_body, raw_skipped = "", []  # (num, text, has_reason)
+    map_known = False  # 절 지도를 읽었을 때만 '넘어간 것' 유무를 판정한다
     if not raw_p.exists():
         rep.fail("raw", f"원문 없음: {raw_p}")
     else:
@@ -225,6 +265,7 @@ def main():
             if not items:
                 rep.fail("raw-map", "절 지도에 '- [x] N.n 제목' 항목 없음")
             else:
+                map_known = True
                 n_read = sum(1 for m, _ in items if m in "xX")
                 for mark, text in items:
                     if mark in (" ", "~"):
@@ -235,6 +276,27 @@ def main():
                 for num, text, _ in raw_skipped:
                     if num is None:
                         rep.warn("raw-map", f"절 번호 없는 건너뜀 항목: '{text}' — 대조 불가")
+
+        # Phase 1 은 코드를 고치지 않는다. 원본 백업이 있으면 코드블록이 그대로인지 본다.
+        if orig_p.exists():
+            orig_c, raw_c = Counter(code_blocks(read(orig_p))), Counter(code_blocks(raw_body))
+            only_raw, only_orig = list((raw_c - orig_c).elements()), list((orig_c - raw_c).elements())
+            if only_raw or only_orig:
+                # 블록 첫 줄은 양쪽이 같은 경우가 많아(붙여넣기 오류는 블록 중간에 있다) 달라진 줄을 보여준다.
+                raw_lines, orig_lines = set(code_lines(only_raw)), set(code_lines(only_orig))
+                added, removed = sorted(raw_lines - orig_lines), sorted(orig_lines - raw_lines)
+                rep.warn(
+                    "raw-code",
+                    f"원본과 다른 코드블록 — raw에만 {len(only_raw)}개, 원본에만 {len(only_orig)}개 "
+                    f"(블록: {'; '.join(f'`{first_line(b)}`' for b in only_raw + only_orig)}). "
+                    f"raw에만 있는 줄: {', '.join(f'`{s[:50]}`' for s in added[:5]) or '없음'} / "
+                    f"원본에만 있는 줄: {', '.join(f'`{s[:50]}`' for s in removed[:5]) or '없음'}"
+                    " — Phase 1 보고의 오타·붙여넣기 오류 수정 목록과 맞는지 본다",
+                )
+            else:
+                rep.ok("raw-code", f"코드블록 {sum(raw_c.values())}개가 원본과 같음")
+        else:
+            rep.info("raw-code", f"원본 백업 없음({orig_p.relative_to(root)}) — raw ↔ 원본 코드 대조 생략")
 
     # ---------------------------------------------------------------- link index (digest·book index 공용)
     idx = build_link_index(content)
@@ -283,9 +345,21 @@ def main():
                 rep.warn("digest-claims", f"문장이 아닌 것 같은 소제목: {nounish}")
             rep.ok("digest-claims", f"주장 절 {len(claims)}개: " + " / ".join(claims))
 
+        left_over = [p for p in TEMPLATE_PHRASES if p in strip_comments(dig_body)]
+        if left_over:
+            rep.fail("template", f"템플릿 안내문이 남아 있음: {left_over} — raw를 study/ 에 쓴 채라면 Phase 1 로 옮긴다")
+
+        # '넘어간 것'은 건너뛴 절이 있을 때만 두는 절이다. 없으면 절 자체를 만들지 않는다.
         _, skipped_txt = find_section(secs, "넘어간 것")
         if skipped_txt is None:
-            rep.fail("digest-skipped", "'## 넘어간 것' 없음")
+            if raw_skipped:
+                rep.fail("digest-skipped", f"절 지도에 건너뛴 절이 {len(raw_skipped)}개인데 '## 넘어간 것' 없음")
+            elif map_known:
+                rep.ok("digest-skipped", "건너뛴 절 없음 — '넘어간 것' 절 없음")
+            else:
+                rep.info("digest-skipped", "raw 절 지도를 못 읽어 '넘어간 것' 유무는 대조 불가")
+        elif not bullets(skipped_txt):
+            rep.fail("digest-skipped", "'넘어간 것' 절에 항목이 없음 — 건너뛴 절이 없으면 절 자체를 지운다")
         else:
             dig_items = bullets(skipped_txt)
             dig_nums = set()
@@ -313,11 +387,34 @@ def main():
             else:
                 rep.fail("extracted", "'여기서 나온 노트' 절에 링크가 없음 — 뺀 노트가 없으면 절 자체를 지운다")
 
-        rnorm = norm(raw_body)
+        # 정리본 코드는 raw 코드블록 발췌만 허용한다. 줄 단위로 대조한다(앞뒤 공백 무시).
+        raw_code_lines = set(code_lines(code_blocks(raw_body)))
+        dig_code = code_blocks(dig_body)
+        orphans = [
+            (i, s)
+            for i, b in enumerate(dig_code, 1)
+            for s in code_lines([b])
+            if not ELIDE_RE.match(s) and s not in raw_code_lines
+        ]
+        if orphans:
+            rep.fail(
+                "code",
+                f"raw 코드블록에 없는 줄 {len(orphans)}개 — "
+                + "; ".join(f"블록{i} `{s[:50]}`" for i, s in orphans[:5])
+                + (" …" if len(orphans) > 5 else ""),
+            )
+        elif dig_code:
+            rep.ok("code", f"코드블록 {len(dig_code)}개, 모든 줄이 raw 코드블록에 있음")
+        if len(dig_code) > MAX_CODE_BLOCKS:
+            rep.warn("code", f"코드블록 {len(dig_code)}개 — 장당 1~{MAX_CODE_BLOCKS}블록")
+        else:
+            rep.info("code", f"코드블록 {len(dig_code)}개")
+
+        rnorm = norm(strip_non_content(raw_body))
         sents = []
-        for ln in dig_body.split("\n"):
+        for ln in strip_non_content(dig_body).split("\n"):
             s = ln.strip()
-            if not s or s.startswith("#") or s.startswith("<!--") or s.startswith("```") or re.match(r"^\s*-\s*\[\[", s):
+            if not s or s.startswith("#") or re.match(r"^\s*-\s*\[\[", s):
                 continue
             s = re.sub(r"^\s*[-*>]\s+", "", s)
             sents += [x for x in re.split(r"(?<=[.!?])\s+", s) if len(norm(x)) >= 15]

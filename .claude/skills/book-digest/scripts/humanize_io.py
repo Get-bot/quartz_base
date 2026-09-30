@@ -31,7 +31,8 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 FM_RE = re.compile(r"^---\n(.*?)\n---\n", re.S)
-CODE_RE = re.compile(r"^(```|~~~)[^\n]*\n.*?^\1[ \t]*$", re.S | re.M)
+# verify_digest.py 의 FENCE_RE 와 같은 펜스 규칙 — 들여쓴 펜스(불릿 안 코드블록)와 4백틱 이상 펜스도 보호한다.
+CODE_RE = re.compile(r"^[ \t]*(`{3,}|~{3,})[^\n]*\n.*?^[ \t]*\1[ \t]*$", re.S | re.M)
 WIKI_RE = re.compile(r"\[\[([^\]\|#]+)(?:#[^\]\|]*)?(?:\|[^\]]*)?\]\]")
 KEEP_RE = re.compile(r"<!--\s*KEEP:code:(\d+)\s*-->")
 SEC_MARK_RE = re.compile(r"<!--\s*SECTION:(\d+)\s*-->")
@@ -59,7 +60,7 @@ def split_sections(body):
     """H2 단위 분할. 첫 H2 앞은 heading=None 서문. 코드블록 안의 '## '는 무시."""
     secs, cur, in_code = [], {"heading": None, "lines": []}, False
     for ln in body.split("\n"):
-        if ln.startswith("```") or ln.startswith("~~~"):
+        if ln.lstrip().startswith(("```", "~~~")):
             in_code = not in_code
         if not in_code and ln.startswith("## "):
             secs.append(cur)

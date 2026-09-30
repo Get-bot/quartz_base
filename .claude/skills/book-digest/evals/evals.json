@@ -6,7 +6,7 @@
       "id": 0,
       "name": "ch01-existing-digest",
       "prompt": "코틀린 인 액션 1장 읽으면서 적은 게 content/private/kotlin-in-action-ch01-raw.md 에 있어. 이거 원문 형식으로 정돈하고, study/kotlin-in-action/ch01.md 정리본으로 만들어줘. 넘어간 절도 정리하고 문체는 humanize-korean으로 다듬어줘.",
-      "expected_output": "raw가 절 지도 형식으로 정돈되고(문장은 그대로, 책 문장에 별도 표기 없음, '걸린 것'·'다음 장으로 미룬 것' 절 없음), 기존 손글씨 정리본의 '남은 것'·'넘어간 것'은 글자 그대로 보존된 채 주장 단위 H2 절이 채워진 정리본, 뺀 노트가 없으므로 '여기서 나온 노트' 절 없음, 정리본에 바깥 노트로 나가는 링크 없음, humanize 통과, verify FAIL 0, 영역 노트는 후보 제안만.",
+      "expected_output": "원래 메모가 _workspace/book-digest/kotlin-in-action-ch01/raw.original.md 로 백업되고, raw가 절 지도 형식으로 정리되며(오탈자·띄어쓰기·백틱·완결된 해라체 문장까지, 메모 불릿 수와 뜻은 그대로, 책 문장에 별도 표기 없음, '걸린 것'·'다음 장으로 미룬 것' 절 없음), 기존 손글씨 정리본의 '남은 것'·'넘어간 것'은 글자 그대로 보존된 채 주장 단위 H2 절이 채워진 정리본, 뺀 노트가 없으므로 '여기서 나온 노트' 절 없음, 정리본에 바깥 노트로 나가는 링크 없음, humanize 통과, verify FAIL 0, 영역 노트는 후보 제안만.",
       "files": [
         "content/private/kotlin-in-action-ch01-raw.md (자유 형식 raw)",
         "content/study/kotlin-in-action/ch01.md (손글씨 얇은 정리본)"
@@ -16,8 +16,17 @@
       "id": 1,
       "name": "ch02-pasted-notes",
       "prompt": "코틀린 인 액션 2장 메모야. 지식베이스에 정리본으로 넣어줘. 문체는 humanize로.\n\n목차는 2.1 기본 요소: 함수와 변수 / 2.2 클래스와 프로퍼티 / 2.3 enum과 when / 2.4 while과 for 루프 / 2.5 예외 / 2.6 요약. 2.5는 자바랑 같아서 안 읽었고 2.4는 훑기만 했어.\n\n함수 선언 fun, 식이 본문인 함수는 = 뒤에 바로 식. 반환 타입 생략 가능 (타입 추론). 블록 본문이면 return 명시해야함\nval 불변 참조 / var 변경 가능. 기본은 val, 필요할때만 var\nval 참조는 불변이지만 가리키는 객체 내부는 바뀔 수 있음 (val list = mutableListOf)\n문자열 템플릿 \"$name\" \"${a.b}\" — 한글 뒤에 변수 붙일땐 중괄호 써야함\n클래스: 프로퍼티가 필드+접근자. val 은 getter만, var 은 getter+setter\n커스텀 접근자 val isSquare: Boolean get() = height == width\n> 책: \"코틀린에서는 프로퍼티가 언어 기본 기능이고 자바의 필드와 접근자 메서드를 완전히 대신한다\"\nenum class 는 enum 이 소프트 키워드. 상수마다 프로퍼티 가질수 있고 메서드 정의하면 상수 목록 뒤에 세미콜론 (코틀린에서 세미콜론 필수인 유일한 곳)\nwhen 은 switch 대체. 인자 없는 when 도 됨. 분기에 임의 객체 사용 가능 setOf(RED, YELLOW)\n스마트 캐스트: is 로 검사하면 컴파일러가 캐스팅 해줌. val 이고 커스텀 접근자 없을때만\nif 도 식이다 (자바는 문). when 도 식\n루프: for 는 range 만. 1..10 닫힌구간, until, downTo, step. in / !in 으로 컬렉션 범위 검사\n맵 이터레이션 for ((k, v) in map)",
-      "expected_output": "붙여넣은 메모가 private/kotlin-in-action-ch02-raw.md 로 저장되며 절 지도(2.4 [~], 2.5 [ ])가 생기고 책 문장에는 별도 표기를 붙이지 않으며, 손글씨 정리본이 없으므로 '남은 것'은 모델이 고른 초안임을 보고에 밝히며, 주장 단위 정리본 + 책 index 2장 행 + study/index.md 제안 문장, humanize 통과, verify FAIL 0.",
+      "expected_output": "붙여넣은 메모가 원본 그대로 _workspace/book-digest/kotlin-in-action-ch02/raw.original.md 에 백업되고, private/kotlin-in-action-ch02-raw.md 로 문장까지 정리돼 저장되며(메모 한 줄이 불릿 하나, 줄 수 유지) 절 지도(2.4 [~], 2.5 [ ])가 생기고 책 문장에는 별도 표기를 붙이지 않으며, 손글씨 정리본이 없으므로 '남은 것'은 모델이 고른 초안임을 보고에 밝히며, 주장 단위 정리본 + '넘어간 것'에 2.4·2.5 + 책 index 2장 행 + study/index.md 제안 문장, raw에 코드블록이 없으므로 정리본 코드블록 0개, humanize 통과, verify FAIL 0.",
       "files": []
+    },
+    {
+      "id": 2,
+      "name": "ch04-raw-in-study",
+      "prompt": "코틀린 인 액션 4장 정리해줘. study/kotlin-in-action/ch04.md 에 템플릿 깔고 그 위에 메모랑 코드 적어뒀어.",
+      "expected_output": "Phase 0이 ch04.md를 정리본이 아니라 raw로 판별하고(주석 밖 `## 4.1` H2, 템플릿 안내문), 파일 그대로를 _workspace/book-digest/kotlin-in-action-ch04/raw.original.md 로 백업한다. 템플릿 잔재(안내문·빈 불릿·원문 뼈대 주석)를 버리고 private/kotlin-in-action-ch04-raw.md 로 정리한다: 절 지도는 초안을 제안하고 확인받고, 첫 절 앞 메모는 `## 도입`, 오탈자(overried·pulbic·가싱성·짦은) 교정, 명사형 메모를 해라체로 끝맺되 메모 불릿 수와 뜻 유지, 코드는 줄 끝 공백 제거와 `// I'm focusable!}` 붙여넣기 오류 수정만 하고 전/후를 보고한다. study/ch04.md는 주장 단위 정리본으로 덮어쓰고, 코드블록 1~3개는 raw 코드블록 발췌(verify code PASS), 건너뛴 절이 없으면 '넘어간 것' 절 없음, 템플릿 안내문 없음(verify template 통과), raw-code는 붙여넣기 오류를 고친 블록만 WARN, verify FAIL 0.",
+      "files": [
+        "content/study/kotlin-in-action/ch04.md (템플릿 + 위쪽 raw 메모와 코드블록, untracked — 사용자가 계속 쓰는 중)"
+      ]
     }
   ]
 }
